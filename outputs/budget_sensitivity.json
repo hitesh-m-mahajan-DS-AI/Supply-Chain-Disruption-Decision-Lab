@@ -1,0 +1,66 @@
+[
+  {
+    "budget_gbp": 0,
+    "status": "optimal",
+    "metrics": {
+      "demand": 8968,
+      "served": 5908,
+      "shortfall": 3060,
+      "service_pct": 65.87867975022301,
+      "purchase_cost_pence": 0,
+      "transfer_cost_pence": 0,
+      "action_cost_pence": 0,
+      "shortfall_penalty_pence": 3005024,
+      "objective_pence": 3005024,
+      "transferred_units": 0
+    }
+  },
+  {
+    "budget_gbp": 2500,
+    "status": "optimal",
+    "metrics": {
+      "demand": 8968,
+      "served": 8259,
+      "shortfall": 709,
+      "service_pct": 92.09411239964318,
+      "purchase_cost_pence": 207993,
+      "transfer_cost_pence": 42000,
+      "action_cost_pence": 249993,
+      "shortfall_penalty_pence": 520632,
+      "objective_pence": 770625,
+      "transferred_units": 1200
+    }
+  },
+  {
+    "budget_gbp": 5000,
+    "status": "optimal",
+    "metrics": {
+      "demand": 8968,
+      "served": 8949,
+      "shortfall": 19,
+      "service_pct": 99.78813559322033,
+      "purchase_cost_pence": 323403,
+      "transfer_cost_pence": 42000,
+      "action_cost_pence": 365403,
+      "shortfall_penalty_pence": 22192,
+      "objective_pence": 387595,
+      "transferred_units": 1200
+    }
+  },
+  {
+    "budget_gbp": 7500,
+    "status": "optimal",
+    "metrics": {
+      "demand": 8968,
+      "served": 8949,
+      "shortfall": 19,
+      "service_pct": 99.78813559322033,
+      "purchase_cost_pence": 323403,
+      "transfer_cost_pence": 42000,
+      "action_cost_pence": 365403,
+      "shortfall_penalty_pence": 22192,
+      "objective_pence": 387595,
+      "transferred_units": 1200
+    }
+  }
+]

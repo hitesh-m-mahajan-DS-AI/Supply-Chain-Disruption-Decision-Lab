@@ -1,0 +1,304 @@
+{
+  "version": "f1.1",
+  "seed": 42,
+  "horizon_days": 7,
+  "source_sha256": "a236999d5fd3429de9a2726aa69bdf73ca83256cf9ed5284db9fe35756e0715a",
+  "demand_sql": "-- Public observations provide an illustrative demand profile, not a forecast.\n-- Exact repeat quarantine uses the original eight fields, not source_row.\nWITH ranked AS (\n  SELECT *, row_number() OVER (\n    PARTITION BY InvoiceNo, StockCode, Description, Quantity,\n                 InvoiceDate, UnitPrice, CustomerID, Country\n    ORDER BY CAST(source_row AS INTEGER)\n  ) AS repeat_number FROM raw\n)\nSELECT StockCode AS sku, min(Description) AS description,\n       sum(CAST(Quantity AS INTEGER))::INTEGER AS observed_units\nFROM ranked\nWHERE repeat_number = 1\n  AND upper(InvoiceNo) NOT LIKE 'C%'\n  AND CAST(Quantity AS INTEGER) > 0\n  AND CAST(UnitPrice AS DOUBLE) > 0\n  AND CAST(InvoiceDate AS TIMESTAMP) >= TIMESTAMP '2010-12-01 00:00:00'\n  AND CAST(InvoiceDate AS TIMESTAMP) < TIMESTAMP '2010-12-08 00:00:00'\n  AND StockCode IN ('84077', '85123A', '21212', '22834', '22197', '85099B')\nGROUP BY StockCode ORDER BY StockCode;\n",
+  "demand_sql_sha256": "051b9ffa7a655a0bd36685f73cdf82d031b4392218be7ef8650e6665f8298c79",
+  "historical_window": "2010-12-01 through 2010-12-07",
+  "products": [
+    {
+      "sku": "21212",
+      "description": "PACK OF 72 RETROSPOT CAKE CASES",
+      "observed_units": 1377,
+      "priority": 2,
+      "shortfall_penalty_pence": 1232
+    },
+    {
+      "sku": "22197",
+      "description": "SMALL POPCORN HOLDER",
+      "observed_units": 888,
+      "priority": 1,
+      "shortfall_penalty_pence": 522
+    },
+    {
+      "sku": "22834",
+      "description": "HAND WARMER BABUSHKA DESIGN",
+      "observed_units": 566,
+      "priority": 3,
+      "shortfall_penalty_pence": 1870
+    },
+    {
+      "sku": "84077",
+      "description": "WORLD WAR 2 GLIDERS ASSTD DESIGNS",
+      "observed_units": 3467,
+      "priority": 1,
+      "shortfall_penalty_pence": 762
+    },
+    {
+      "sku": "85099B",
+      "description": "JUMBO BAG RED RETROSPOT",
+      "observed_units": 1192,
+      "priority": 2,
+      "shortfall_penalty_pence": 1168
+    },
+    {
+      "sku": "85123A",
+      "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+      "observed_units": 1478,
+      "priority": 3,
+      "shortfall_penalty_pence": 870
+    }
+  ],
+  "inventory": [
+    {
+      "sku": "21212",
+      "hub": "North",
+      "base_demand": 545,
+      "initial_stock": 790
+    },
+    {
+      "sku": "21212",
+      "hub": "Central",
+      "base_demand": 539,
+      "initial_stock": 259
+    },
+    {
+      "sku": "21212",
+      "hub": "South",
+      "base_demand": 293,
+      "initial_stock": 105
+    },
+    {
+      "sku": "22197",
+      "hub": "North",
+      "base_demand": 202,
+      "initial_stock": 73
+    },
+    {
+      "sku": "22197",
+      "hub": "Central",
+      "base_demand": 357,
+      "initial_stock": 518
+    },
+    {
+      "sku": "22197",
+      "hub": "South",
+      "base_demand": 329,
+      "initial_stock": 158
+    },
+    {
+      "sku": "22834",
+      "hub": "North",
+      "base_demand": 224,
+      "initial_stock": 108
+    },
+    {
+      "sku": "22834",
+      "hub": "Central",
+      "base_demand": 154,
+      "initial_stock": 55
+    },
+    {
+      "sku": "22834",
+      "hub": "South",
+      "base_demand": 188,
+      "initial_stock": 273
+    },
+    {
+      "sku": "84077",
+      "hub": "North",
+      "base_demand": 1891,
+      "initial_stock": 2742
+    },
+    {
+      "sku": "84077",
+      "hub": "Central",
+      "base_demand": 700,
+      "initial_stock": 336
+    },
+    {
+      "sku": "84077",
+      "hub": "South",
+      "base_demand": 876,
+      "initial_stock": 315
+    },
+    {
+      "sku": "85099B",
+      "hub": "North",
+      "base_demand": 551,
+      "initial_stock": 198
+    },
+    {
+      "sku": "85099B",
+      "hub": "Central",
+      "base_demand": 270,
+      "initial_stock": 392
+    },
+    {
+      "sku": "85099B",
+      "hub": "South",
+      "base_demand": 371,
+      "initial_stock": 178
+    },
+    {
+      "sku": "85123A",
+      "hub": "North",
+      "base_demand": 385,
+      "initial_stock": 185
+    },
+    {
+      "sku": "85123A",
+      "hub": "Central",
+      "base_demand": 635,
+      "initial_stock": 229
+    },
+    {
+      "sku": "85123A",
+      "hub": "South",
+      "base_demand": 458,
+      "initial_stock": 664
+    }
+  ],
+  "offers": [
+    {
+      "supplier": "Atlas",
+      "sku": "21212",
+      "capacity": 358,
+      "unit_cost_pence": 154,
+      "lead_days": 2
+    },
+    {
+      "supplier": "Beacon",
+      "sku": "21212",
+      "capacity": 275,
+      "unit_cost_pence": 208,
+      "lead_days": 4
+    },
+    {
+      "supplier": "Cobalt",
+      "sku": "21212",
+      "capacity": 193,
+      "unit_cost_pence": 270,
+      "lead_days": 6
+    },
+    {
+      "supplier": "Atlas",
+      "sku": "22197",
+      "capacity": 231,
+      "unit_cost_pence": 87,
+      "lead_days": 2
+    },
+    {
+      "supplier": "Beacon",
+      "sku": "22197",
+      "capacity": 178,
+      "unit_cost_pence": 117,
+      "lead_days": 4
+    },
+    {
+      "supplier": "Cobalt",
+      "sku": "22197",
+      "capacity": 124,
+      "unit_cost_pence": 152,
+      "lead_days": 6
+    },
+    {
+      "supplier": "Atlas",
+      "sku": "22834",
+      "capacity": 147,
+      "unit_cost_pence": 187,
+      "lead_days": 2
+    },
+    {
+      "supplier": "Beacon",
+      "sku": "22834",
+      "capacity": 113,
+      "unit_cost_pence": 252,
+      "lead_days": 4
+    },
+    {
+      "supplier": "Cobalt",
+      "sku": "22834",
+      "capacity": 79,
+      "unit_cost_pence": 327,
+      "lead_days": 6
+    },
+    {
+      "supplier": "Atlas",
+      "sku": "84077",
+      "capacity": 901,
+      "unit_cost_pence": 127,
+      "lead_days": 2
+    },
+    {
+      "supplier": "Beacon",
+      "sku": "84077",
+      "capacity": 693,
+      "unit_cost_pence": 171,
+      "lead_days": 4
+    },
+    {
+      "supplier": "Cobalt",
+      "sku": "84077",
+      "capacity": 485,
+      "unit_cost_pence": 222,
+      "lead_days": 6
+    },
+    {
+      "supplier": "Atlas",
+      "sku": "85099B",
+      "capacity": 310,
+      "unit_cost_pence": 146,
+      "lead_days": 2
+    },
+    {
+      "supplier": "Beacon",
+      "sku": "85099B",
+      "capacity": 238,
+      "unit_cost_pence": 197,
+      "lead_days": 4
+    },
+    {
+      "supplier": "Cobalt",
+      "sku": "85099B",
+      "capacity": 167,
+      "unit_cost_pence": 256,
+      "lead_days": 6
+    },
+    {
+      "supplier": "Atlas",
+      "sku": "85123A",
+      "capacity": 384,
+      "unit_cost_pence": 87,
+      "lead_days": 2
+    },
+    {
+      "supplier": "Beacon",
+      "sku": "85123A",
+      "capacity": 296,
+      "unit_cost_pence": 117,
+      "lead_days": 4
+    },
+    {
+      "supplier": "Cobalt",
+      "sku": "85123A",
+      "capacity": 207,
+      "unit_cost_pence": 152,
+      "lead_days": 6
+    }
+  ],
+  "hubs": [
+    "North",
+    "Central",
+    "South"
+  ],
+  "receiving_capacity": {
+    "North": 2000,
+    "Central": 2000,
+    "South": 2000
+  },
+  "transfer_unit_cost_pence": 35,
+  "transfer_lead_days": 2,
+  "provenance": "Only SKU codes, descriptions and observed_units are public observations. Every operational field is a seed-42 fictional planning assumption. Demand is not a forecast."
+}

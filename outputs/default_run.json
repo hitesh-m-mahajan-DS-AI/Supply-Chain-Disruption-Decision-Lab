@@ -1,0 +1,2171 @@
+{
+  "id": "43c63f2e-b6b1-42b0-abed-f99ce4057d09",
+  "created_at": "2026-10-26T10:26:28.302109+00:00",
+  "parameters": {
+    "name": "Supplier outage",
+    "demand_pct": 100,
+    "budget_gbp": 5000,
+    "disrupted_supplier": "Atlas",
+    "supplier_capacity_pct": 100,
+    "extra_lead_days": 0,
+    "allow_transfers": true,
+    "transfer_limit": 1200,
+    "minimum_service_pct": 0
+  },
+  "scenario_snapshot": {
+    "version": "f1.1",
+    "seed": 42,
+    "horizon_days": 7,
+    "source_sha256": "a236999d5fd3429de9a2726aa69bdf73ca83256cf9ed5284db9fe35756e0715a",
+    "demand_sql": "-- Public observations provide an illustrative demand profile, not a forecast.\n-- Exact repeat quarantine uses the original eight fields, not source_row.\nWITH ranked AS (\n  SELECT *, row_number() OVER (\n    PARTITION BY InvoiceNo, StockCode, Description, Quantity,\n                 InvoiceDate, UnitPrice, CustomerID, Country\n    ORDER BY CAST(source_row AS INTEGER)\n  ) AS repeat_number FROM raw\n)\nSELECT StockCode AS sku, min(Description) AS description,\n       sum(CAST(Quantity AS INTEGER))::INTEGER AS observed_units\nFROM ranked\nWHERE repeat_number = 1\n  AND upper(InvoiceNo) NOT LIKE 'C%'\n  AND CAST(Quantity AS INTEGER) > 0\n  AND CAST(UnitPrice AS DOUBLE) > 0\n  AND CAST(InvoiceDate AS TIMESTAMP) >= TIMESTAMP '2010-12-01 00:00:00'\n  AND CAST(InvoiceDate AS TIMESTAMP) < TIMESTAMP '2010-12-08 00:00:00'\n  AND StockCode IN ('84077', '85123A', '21212', '22834', '22197', '85099B')\nGROUP BY StockCode ORDER BY StockCode;\n",
+    "demand_sql_sha256": "051b9ffa7a655a0bd36685f73cdf82d031b4392218be7ef8650e6665f8298c79",
+    "historical_window": "2010-12-01 through 2010-12-07",
+    "products": [
+      {
+        "sku": "21212",
+        "description": "PACK OF 72 RETROSPOT CAKE CASES",
+        "observed_units": 1377,
+        "priority": 2,
+        "shortfall_penalty_pence": 1232
+      },
+      {
+        "sku": "22197",
+        "description": "SMALL POPCORN HOLDER",
+        "observed_units": 888,
+        "priority": 1,
+        "shortfall_penalty_pence": 522
+      },
+      {
+        "sku": "22834",
+        "description": "HAND WARMER BABUSHKA DESIGN",
+        "observed_units": 566,
+        "priority": 3,
+        "shortfall_penalty_pence": 1870
+      },
+      {
+        "sku": "84077",
+        "description": "WORLD WAR 2 GLIDERS ASSTD DESIGNS",
+        "observed_units": 3467,
+        "priority": 1,
+        "shortfall_penalty_pence": 762
+      },
+      {
+        "sku": "85099B",
+        "description": "JUMBO BAG RED RETROSPOT",
+        "observed_units": 1192,
+        "priority": 2,
+        "shortfall_penalty_pence": 1168
+      },
+      {
+        "sku": "85123A",
+        "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+        "observed_units": 1478,
+        "priority": 3,
+        "shortfall_penalty_pence": 870
+      }
+    ],
+    "inventory": [
+      {
+        "sku": "21212",
+        "hub": "North",
+        "base_demand": 545,
+        "initial_stock": 790
+      },
+      {
+        "sku": "21212",
+        "hub": "Central",
+        "base_demand": 539,
+        "initial_stock": 259
+      },
+      {
+        "sku": "21212",
+        "hub": "South",
+        "base_demand": 293,
+        "initial_stock": 105
+      },
+      {
+        "sku": "22197",
+        "hub": "North",
+        "base_demand": 202,
+        "initial_stock": 73
+      },
+      {
+        "sku": "22197",
+        "hub": "Central",
+        "base_demand": 357,
+        "initial_stock": 518
+      },
+      {
+        "sku": "22197",
+        "hub": "South",
+        "base_demand": 329,
+        "initial_stock": 158
+      },
+      {
+        "sku": "22834",
+        "hub": "North",
+        "base_demand": 224,
+        "initial_stock": 108
+      },
+      {
+        "sku": "22834",
+        "hub": "Central",
+        "base_demand": 154,
+        "initial_stock": 55
+      },
+      {
+        "sku": "22834",
+        "hub": "South",
+        "base_demand": 188,
+        "initial_stock": 273
+      },
+      {
+        "sku": "84077",
+        "hub": "North",
+        "base_demand": 1891,
+        "initial_stock": 2742
+      },
+      {
+        "sku": "84077",
+        "hub": "Central",
+        "base_demand": 700,
+        "initial_stock": 336
+      },
+      {
+        "sku": "84077",
+        "hub": "South",
+        "base_demand": 876,
+        "initial_stock": 315
+      },
+      {
+        "sku": "85099B",
+        "hub": "North",
+        "base_demand": 551,
+        "initial_stock": 198
+      },
+      {
+        "sku": "85099B",
+        "hub": "Central",
+        "base_demand": 270,
+        "initial_stock": 392
+      },
+      {
+        "sku": "85099B",
+        "hub": "South",
+        "base_demand": 371,
+        "initial_stock": 178
+      },
+      {
+        "sku": "85123A",
+        "hub": "North",
+        "base_demand": 385,
+        "initial_stock": 185
+      },
+      {
+        "sku": "85123A",
+        "hub": "Central",
+        "base_demand": 635,
+        "initial_stock": 229
+      },
+      {
+        "sku": "85123A",
+        "hub": "South",
+        "base_demand": 458,
+        "initial_stock": 664
+      }
+    ],
+    "offers": [
+      {
+        "supplier": "Atlas",
+        "sku": "21212",
+        "capacity": 358,
+        "unit_cost_pence": 154,
+        "lead_days": 2
+      },
+      {
+        "supplier": "Beacon",
+        "sku": "21212",
+        "capacity": 275,
+        "unit_cost_pence": 208,
+        "lead_days": 4
+      },
+      {
+        "supplier": "Cobalt",
+        "sku": "21212",
+        "capacity": 193,
+        "unit_cost_pence": 270,
+        "lead_days": 6
+      },
+      {
+        "supplier": "Atlas",
+        "sku": "22197",
+        "capacity": 231,
+        "unit_cost_pence": 87,
+        "lead_days": 2
+      },
+      {
+        "supplier": "Beacon",
+        "sku": "22197",
+        "capacity": 178,
+        "unit_cost_pence": 117,
+        "lead_days": 4
+      },
+      {
+        "supplier": "Cobalt",
+        "sku": "22197",
+        "capacity": 124,
+        "unit_cost_pence": 152,
+        "lead_days": 6
+      },
+      {
+        "supplier": "Atlas",
+        "sku": "22834",
+        "capacity": 147,
+        "unit_cost_pence": 187,
+        "lead_days": 2
+      },
+      {
+        "supplier": "Beacon",
+        "sku": "22834",
+        "capacity": 113,
+        "unit_cost_pence": 252,
+        "lead_days": 4
+      },
+      {
+        "supplier": "Cobalt",
+        "sku": "22834",
+        "capacity": 79,
+        "unit_cost_pence": 327,
+        "lead_days": 6
+      },
+      {
+        "supplier": "Atlas",
+        "sku": "84077",
+        "capacity": 901,
+        "unit_cost_pence": 127,
+        "lead_days": 2
+      },
+      {
+        "supplier": "Beacon",
+        "sku": "84077",
+        "capacity": 693,
+        "unit_cost_pence": 171,
+        "lead_days": 4
+      },
+      {
+        "supplier": "Cobalt",
+        "sku": "84077",
+        "capacity": 485,
+        "unit_cost_pence": 222,
+        "lead_days": 6
+      },
+      {
+        "supplier": "Atlas",
+        "sku": "85099B",
+        "capacity": 310,
+        "unit_cost_pence": 146,
+        "lead_days": 2
+      },
+      {
+        "supplier": "Beacon",
+        "sku": "85099B",
+        "capacity": 238,
+        "unit_cost_pence": 197,
+        "lead_days": 4
+      },
+      {
+        "supplier": "Cobalt",
+        "sku": "85099B",
+        "capacity": 167,
+        "unit_cost_pence": 256,
+        "lead_days": 6
+      },
+      {
+        "supplier": "Atlas",
+        "sku": "85123A",
+        "capacity": 384,
+        "unit_cost_pence": 87,
+        "lead_days": 2
+      },
+      {
+        "supplier": "Beacon",
+        "sku": "85123A",
+        "capacity": 296,
+        "unit_cost_pence": 117,
+        "lead_days": 4
+      },
+      {
+        "supplier": "Cobalt",
+        "sku": "85123A",
+        "capacity": 207,
+        "unit_cost_pence": 152,
+        "lead_days": 6
+      }
+    ],
+    "hubs": [
+      "North",
+      "Central",
+      "South"
+    ],
+    "receiving_capacity": {
+      "North": 2000,
+      "Central": 2000,
+      "South": 2000
+    },
+    "transfer_unit_cost_pence": 35,
+    "transfer_lead_days": 2,
+    "provenance": "Only SKU codes, descriptions and observed_units are public observations. Every operational field is a seed-42 fictional planning assumption. Demand is not a forecast."
+  },
+  "scenario_sha256": "ee03291645349d162ecd399b077f67823b5d00a6c95de5ad4efe6169b7b119d7",
+  "input_sha256": "7c9a86f69d08c241fd3807005923b7a24b2e95f531ef1c5fc95fbbf9b2908797",
+  "engine_version": "1.0.0",
+  "engine_sha256": "8ba3d7a5681987ac532bcf13839fc4b46372260f3283d1586bfe488d64a93ad2",
+  "source_sql": "-- Public observations provide an illustrative demand profile, not a forecast.\n-- Exact repeat quarantine uses the original eight fields, not source_row.\nWITH ranked AS (\n  SELECT *, row_number() OVER (\n    PARTITION BY InvoiceNo, StockCode, Description, Quantity,\n                 InvoiceDate, UnitPrice, CustomerID, Country\n    ORDER BY CAST(source_row AS INTEGER)\n  ) AS repeat_number FROM raw\n)\nSELECT StockCode AS sku, min(Description) AS description,\n       sum(CAST(Quantity AS INTEGER))::INTEGER AS observed_units\nFROM ranked\nWHERE repeat_number = 1\n  AND upper(InvoiceNo) NOT LIKE 'C%'\n  AND CAST(Quantity AS INTEGER) > 0\n  AND CAST(UnitPrice AS DOUBLE) > 0\n  AND CAST(InvoiceDate AS TIMESTAMP) >= TIMESTAMP '2010-12-01 00:00:00'\n  AND CAST(InvoiceDate AS TIMESTAMP) < TIMESTAMP '2010-12-08 00:00:00'\n  AND StockCode IN ('84077', '85123A', '21212', '22834', '22197', '85099B')\nGROUP BY StockCode ORDER BY StockCode;\n",
+  "source_sql_sha256": "051b9ffa7a655a0bd36685f73cdf82d031b4392218be7ef8650e6665f8298c79",
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "duckdb": "2.0.0",
+    "fastapi": "0.162.0"
+  },
+  "baseline": {
+    "method": "Greedy baseline",
+    "status": "heuristic",
+    "seconds": 0.000343,
+    "mip_gap": null,
+    "allocations": [
+      {
+        "sku": "21212",
+        "hub": "North",
+        "base_demand": 545,
+        "initial_stock": 790,
+        "demand": 545,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 245,
+        "served": 545,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "21212",
+        "hub": "Central",
+        "base_demand": 539,
+        "initial_stock": 259,
+        "demand": 539,
+        "purchased": 35,
+        "transfer_in": 245,
+        "transfer_out": 0,
+        "served": 539,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "21212",
+        "hub": "South",
+        "base_demand": 293,
+        "initial_stock": 105,
+        "demand": 293,
+        "purchased": 188,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 293,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22197",
+        "hub": "North",
+        "base_demand": 202,
+        "initial_stock": 73,
+        "demand": 202,
+        "purchased": 0,
+        "transfer_in": 129,
+        "transfer_out": 0,
+        "served": 202,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22197",
+        "hub": "Central",
+        "base_demand": 357,
+        "initial_stock": 518,
+        "demand": 357,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 161,
+        "served": 357,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22197",
+        "hub": "South",
+        "base_demand": 329,
+        "initial_stock": 158,
+        "demand": 329,
+        "purchased": 139,
+        "transfer_in": 32,
+        "transfer_out": 0,
+        "served": 329,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22834",
+        "hub": "North",
+        "base_demand": 224,
+        "initial_stock": 108,
+        "demand": 224,
+        "purchased": 31,
+        "transfer_in": 85,
+        "transfer_out": 0,
+        "served": 224,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22834",
+        "hub": "Central",
+        "base_demand": 154,
+        "initial_stock": 55,
+        "demand": 154,
+        "purchased": 99,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 154,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22834",
+        "hub": "South",
+        "base_demand": 188,
+        "initial_stock": 273,
+        "demand": 188,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 85,
+        "served": 188,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "84077",
+        "hub": "North",
+        "base_demand": 1891,
+        "initial_stock": 2742,
+        "demand": 1891,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 709,
+        "served": 1891,
+        "shortfall": 0,
+        "ending_stock": 142
+      },
+      {
+        "sku": "84077",
+        "hub": "Central",
+        "base_demand": 700,
+        "initial_stock": 336,
+        "demand": 700,
+        "purchased": 0,
+        "transfer_in": 364,
+        "transfer_out": 0,
+        "served": 700,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "84077",
+        "hub": "South",
+        "base_demand": 876,
+        "initial_stock": 315,
+        "demand": 876,
+        "purchased": 216,
+        "transfer_in": 345,
+        "transfer_out": 0,
+        "served": 876,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85099B",
+        "hub": "North",
+        "base_demand": 551,
+        "initial_stock": 198,
+        "demand": 551,
+        "purchased": 353,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 551,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85099B",
+        "hub": "Central",
+        "base_demand": 270,
+        "initial_stock": 392,
+        "demand": 270,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 270,
+        "shortfall": 0,
+        "ending_stock": 122
+      },
+      {
+        "sku": "85099B",
+        "hub": "South",
+        "base_demand": 371,
+        "initial_stock": 178,
+        "demand": 371,
+        "purchased": 52,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 230,
+        "shortfall": 141,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85123A",
+        "hub": "North",
+        "base_demand": 385,
+        "initial_stock": 185,
+        "demand": 385,
+        "purchased": 200,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 385,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85123A",
+        "hub": "Central",
+        "base_demand": 635,
+        "initial_stock": 229,
+        "demand": 635,
+        "purchased": 303,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 532,
+        "shortfall": 103,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85123A",
+        "hub": "South",
+        "base_demand": 458,
+        "initial_stock": 664,
+        "demand": 458,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 458,
+        "shortfall": 0,
+        "ending_stock": 206
+      }
+    ],
+    "decisions": [
+      {
+        "kind": "transfer",
+        "sku": "21212",
+        "hub": "Central",
+        "from_hub": "North",
+        "units": 245,
+        "unit_cost_pence": 35,
+        "arrival_days": 2
+      },
+      {
+        "kind": "transfer",
+        "sku": "22197",
+        "hub": "North",
+        "from_hub": "Central",
+        "units": 129,
+        "unit_cost_pence": 35,
+        "arrival_days": 2
+      },
+      {
+        "kind": "transfer",
+        "sku": "22197",
+        "hub": "South",
+        "from_hub": "Central",
+        "units": 32,
+        "unit_cost_pence": 35,
+        "arrival_days": 2
+      },
+      {
+        "kind": "transfer",
+        "sku": "22834",
+        "hub": "North",
+        "from_hub": "South",
+        "units": 85,
+        "unit_cost_pence": 35,
+        "arrival_days": 2
+      },
+      {
+        "kind": "transfer",
+        "sku": "84077",
+        "hub": "Central",
+        "from_hub": "North",
+        "units": 364,
+        "unit_cost_pence": 35,
+        "arrival_days": 2
+      },
+      {
+        "kind": "transfer",
+        "sku": "84077",
+        "hub": "South",
+        "from_hub": "North",
+        "units": 345,
+        "unit_cost_pence": 35,
+        "arrival_days": 2
+      },
+      {
+        "kind": "purchase",
+        "sku": "21212",
+        "hub": "Central",
+        "supplier": "Beacon",
+        "units": 35,
+        "unit_cost_pence": 208,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "21212",
+        "hub": "South",
+        "supplier": "Beacon",
+        "units": 188,
+        "unit_cost_pence": 208,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "22197",
+        "hub": "South",
+        "supplier": "Beacon",
+        "units": 139,
+        "unit_cost_pence": 117,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "22834",
+        "hub": "North",
+        "supplier": "Beacon",
+        "units": 31,
+        "unit_cost_pence": 252,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "22834",
+        "hub": "Central",
+        "supplier": "Beacon",
+        "units": 82,
+        "unit_cost_pence": 252,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "22834",
+        "hub": "Central",
+        "supplier": "Cobalt",
+        "units": 17,
+        "unit_cost_pence": 327,
+        "arrival_days": 6
+      },
+      {
+        "kind": "purchase",
+        "sku": "84077",
+        "hub": "South",
+        "supplier": "Beacon",
+        "units": 216,
+        "unit_cost_pence": 171,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "85099B",
+        "hub": "North",
+        "supplier": "Beacon",
+        "units": 238,
+        "unit_cost_pence": 197,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "85099B",
+        "hub": "North",
+        "supplier": "Cobalt",
+        "units": 115,
+        "unit_cost_pence": 256,
+        "arrival_days": 6
+      },
+      {
+        "kind": "purchase",
+        "sku": "85099B",
+        "hub": "South",
+        "supplier": "Cobalt",
+        "units": 52,
+        "unit_cost_pence": 256,
+        "arrival_days": 6
+      },
+      {
+        "kind": "purchase",
+        "sku": "85123A",
+        "hub": "North",
+        "supplier": "Beacon",
+        "units": 200,
+        "unit_cost_pence": 117,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "85123A",
+        "hub": "Central",
+        "supplier": "Beacon",
+        "units": 96,
+        "unit_cost_pence": 117,
+        "arrival_days": 4
+      },
+      {
+        "kind": "purchase",
+        "sku": "85123A",
+        "hub": "Central",
+        "supplier": "Cobalt",
+        "units": 207,
+        "unit_cost_pence": 152,
+        "arrival_days": 6
+      }
+    ],
+    "metrics": {
+      "demand": 8968,
+      "served": 8724,
+      "shortfall": 244,
+      "service_pct": 97.2792149866191,
+      "purchase_cost_pence": 289352,
+      "transfer_cost_pence": 42000,
+      "action_cost_pence": 331352,
+      "shortfall_penalty_pence": 254298,
+      "objective_pence": 585650,
+      "transferred_units": 1200
+    },
+    "audit": {
+      "valid": true,
+      "violations": [],
+      "checks": [
+        {
+          "label": "Shared action budget",
+          "used": 331352,
+          "limit": 500000,
+          "slack": 168648,
+          "unit": "pence",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Transfer allowance",
+          "used": 1200,
+          "limit": 1200,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Minimum served units",
+          "used": 8724,
+          "limit": 0,
+          "slack": 8724,
+          "unit": "units",
+          "minimum": true,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "North receiving capacity",
+          "used": 798,
+          "limit": 2000,
+          "slack": 1202,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Central receiving capacity",
+          "used": 1046,
+          "limit": 2000,
+          "slack": 954,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "South receiving capacity",
+          "used": 972,
+          "limit": 2000,
+          "slack": 1028,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 21212",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 21212",
+          "used": 223,
+          "limit": 275,
+          "slack": 52,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Cobalt / 21212",
+          "used": 0,
+          "limit": 193,
+          "slack": 193,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 22197",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 22197",
+          "used": 139,
+          "limit": 178,
+          "slack": 39,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Cobalt / 22197",
+          "used": 0,
+          "limit": 124,
+          "slack": 124,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 22834",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 22834",
+          "used": 113,
+          "limit": 113,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 22834",
+          "used": 17,
+          "limit": 79,
+          "slack": 62,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 84077",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 84077",
+          "used": 216,
+          "limit": 693,
+          "slack": 477,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Cobalt / 84077",
+          "used": 0,
+          "limit": 485,
+          "slack": 485,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 85099B",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 85099B",
+          "used": 238,
+          "limit": 238,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 85099B",
+          "used": 167,
+          "limit": 167,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Atlas / 85123A",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 85123A",
+          "used": 296,
+          "limit": 296,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 85123A",
+          "used": 207,
+          "limit": 207,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 21212 / North",
+          "used": 245,
+          "limit": 245,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 21212 / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 21212 / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22197 / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22197 / Central",
+          "used": 161,
+          "limit": 161,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22197 / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22834 / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22834 / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22834 / South",
+          "used": 85,
+          "limit": 85,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 84077 / North",
+          "used": 709,
+          "limit": 851,
+          "slack": 142,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Initial surplus / 84077 / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 84077 / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85099B / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85099B / Central",
+          "used": 0,
+          "limit": 122,
+          "slack": 122,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Initial surplus / 85099B / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85123A / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85123A / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85123A / South",
+          "used": 0,
+          "limit": 206,
+          "slack": 206,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        }
+      ],
+      "note": "At-limit constraints are descriptive; zero slack alone is not a causal or economic bottleneck proof."
+    }
+  },
+  "optimized": {
+    "method": "Constrained optimizer",
+    "status": "optimal",
+    "seconds": 0.009165,
+    "mip_gap": 0.0,
+    "allocations": [
+      {
+        "sku": "21212",
+        "hub": "North",
+        "base_demand": 545,
+        "initial_stock": 790,
+        "demand": 545,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 245,
+        "served": 545,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "21212",
+        "hub": "Central",
+        "base_demand": 539,
+        "initial_stock": 259,
+        "demand": 539,
+        "purchased": 35,
+        "transfer_in": 245,
+        "transfer_out": 0,
+        "served": 539,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "21212",
+        "hub": "South",
+        "base_demand": 293,
+        "initial_stock": 105,
+        "demand": 293,
+        "purchased": 188,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 293,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22197",
+        "hub": "North",
+        "base_demand": 202,
+        "initial_stock": 73,
+        "demand": 202,
+        "purchased": 129,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 202,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22197",
+        "hub": "Central",
+        "base_demand": 357,
+        "initial_stock": 518,
+        "demand": 357,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 357,
+        "shortfall": 0,
+        "ending_stock": 161
+      },
+      {
+        "sku": "22197",
+        "hub": "South",
+        "base_demand": 329,
+        "initial_stock": 158,
+        "demand": 329,
+        "purchased": 171,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 329,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22834",
+        "hub": "North",
+        "base_demand": 224,
+        "initial_stock": 108,
+        "demand": 224,
+        "purchased": 31,
+        "transfer_in": 85,
+        "transfer_out": 0,
+        "served": 224,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22834",
+        "hub": "Central",
+        "base_demand": 154,
+        "initial_stock": 55,
+        "demand": 154,
+        "purchased": 99,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 154,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "22834",
+        "hub": "South",
+        "base_demand": 188,
+        "initial_stock": 273,
+        "demand": 188,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 85,
+        "served": 188,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "84077",
+        "hub": "North",
+        "base_demand": 1891,
+        "initial_stock": 2742,
+        "demand": 1891,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 645,
+        "served": 1891,
+        "shortfall": 0,
+        "ending_stock": 206
+      },
+      {
+        "sku": "84077",
+        "hub": "Central",
+        "base_demand": 700,
+        "initial_stock": 336,
+        "demand": 700,
+        "purchased": 0,
+        "transfer_in": 364,
+        "transfer_out": 0,
+        "served": 700,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "84077",
+        "hub": "South",
+        "base_demand": 876,
+        "initial_stock": 315,
+        "demand": 876,
+        "purchased": 280,
+        "transfer_in": 281,
+        "transfer_out": 0,
+        "served": 876,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85099B",
+        "hub": "North",
+        "base_demand": 551,
+        "initial_stock": 198,
+        "demand": 551,
+        "purchased": 231,
+        "transfer_in": 122,
+        "transfer_out": 0,
+        "served": 551,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85099B",
+        "hub": "Central",
+        "base_demand": 270,
+        "initial_stock": 392,
+        "demand": 270,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 122,
+        "served": 270,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85099B",
+        "hub": "South",
+        "base_demand": 371,
+        "initial_stock": 178,
+        "demand": 371,
+        "purchased": 174,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 352,
+        "shortfall": 19,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85123A",
+        "hub": "North",
+        "base_demand": 385,
+        "initial_stock": 185,
+        "demand": 385,
+        "purchased": 97,
+        "transfer_in": 103,
+        "transfer_out": 0,
+        "served": 385,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85123A",
+        "hub": "Central",
+        "base_demand": 635,
+        "initial_stock": 229,
+        "demand": 635,
+        "purchased": 406,
+        "transfer_in": 0,
+        "transfer_out": 0,
+        "served": 635,
+        "shortfall": 0,
+        "ending_stock": 0
+      },
+      {
+        "sku": "85123A",
+        "hub": "South",
+        "base_demand": 458,
+        "initial_stock": 664,
+        "demand": 458,
+        "purchased": 0,
+        "transfer_in": 0,
+        "transfer_out": 103,
+        "served": 458,
+        "shortfall": 0,
+        "ending_stock": 103
+      }
+    ],
+    "decisions": [
+      {
+        "kind": "purchase",
+        "sku": "21212",
+        "hub": "Central",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 208,
+        "units": 35
+      },
+      {
+        "kind": "purchase",
+        "sku": "21212",
+        "hub": "South",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 208,
+        "units": 188
+      },
+      {
+        "kind": "purchase",
+        "sku": "22197",
+        "hub": "North",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 117,
+        "units": 129
+      },
+      {
+        "kind": "purchase",
+        "sku": "22197",
+        "hub": "South",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 117,
+        "units": 49
+      },
+      {
+        "kind": "purchase",
+        "sku": "22197",
+        "hub": "South",
+        "supplier": "Cobalt",
+        "arrival_days": 6,
+        "unit_cost_pence": 152,
+        "units": 122
+      },
+      {
+        "kind": "purchase",
+        "sku": "22834",
+        "hub": "North",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 252,
+        "units": 14
+      },
+      {
+        "kind": "purchase",
+        "sku": "22834",
+        "hub": "Central",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 252,
+        "units": 99
+      },
+      {
+        "kind": "purchase",
+        "sku": "22834",
+        "hub": "North",
+        "supplier": "Cobalt",
+        "arrival_days": 6,
+        "unit_cost_pence": 327,
+        "units": 17
+      },
+      {
+        "kind": "purchase",
+        "sku": "84077",
+        "hub": "South",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 171,
+        "units": 280
+      },
+      {
+        "kind": "purchase",
+        "sku": "85099B",
+        "hub": "North",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 197,
+        "units": 231
+      },
+      {
+        "kind": "purchase",
+        "sku": "85099B",
+        "hub": "South",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 197,
+        "units": 7
+      },
+      {
+        "kind": "purchase",
+        "sku": "85099B",
+        "hub": "South",
+        "supplier": "Cobalt",
+        "arrival_days": 6,
+        "unit_cost_pence": 256,
+        "units": 167
+      },
+      {
+        "kind": "purchase",
+        "sku": "85123A",
+        "hub": "Central",
+        "supplier": "Beacon",
+        "arrival_days": 4,
+        "unit_cost_pence": 117,
+        "units": 296
+      },
+      {
+        "kind": "purchase",
+        "sku": "85123A",
+        "hub": "North",
+        "supplier": "Cobalt",
+        "arrival_days": 6,
+        "unit_cost_pence": 152,
+        "units": 97
+      },
+      {
+        "kind": "purchase",
+        "sku": "85123A",
+        "hub": "Central",
+        "supplier": "Cobalt",
+        "arrival_days": 6,
+        "unit_cost_pence": 152,
+        "units": 110
+      },
+      {
+        "kind": "transfer",
+        "sku": "21212",
+        "hub": "Central",
+        "from_hub": "North",
+        "arrival_days": 2,
+        "unit_cost_pence": 35,
+        "units": 245
+      },
+      {
+        "kind": "transfer",
+        "sku": "22834",
+        "hub": "North",
+        "from_hub": "South",
+        "arrival_days": 2,
+        "unit_cost_pence": 35,
+        "units": 85
+      },
+      {
+        "kind": "transfer",
+        "sku": "84077",
+        "hub": "Central",
+        "from_hub": "North",
+        "arrival_days": 2,
+        "unit_cost_pence": 35,
+        "units": 364
+      },
+      {
+        "kind": "transfer",
+        "sku": "84077",
+        "hub": "South",
+        "from_hub": "North",
+        "arrival_days": 2,
+        "unit_cost_pence": 35,
+        "units": 281
+      },
+      {
+        "kind": "transfer",
+        "sku": "85099B",
+        "hub": "North",
+        "from_hub": "Central",
+        "arrival_days": 2,
+        "unit_cost_pence": 35,
+        "units": 122
+      },
+      {
+        "kind": "transfer",
+        "sku": "85123A",
+        "hub": "North",
+        "from_hub": "South",
+        "arrival_days": 2,
+        "unit_cost_pence": 35,
+        "units": 103
+      }
+    ],
+    "metrics": {
+      "demand": 8968,
+      "served": 8949,
+      "shortfall": 19,
+      "service_pct": 99.78813559322033,
+      "purchase_cost_pence": 323403,
+      "transfer_cost_pence": 42000,
+      "action_cost_pence": 365403,
+      "shortfall_penalty_pence": 22192,
+      "objective_pence": 387595,
+      "transferred_units": 1200
+    },
+    "audit": {
+      "valid": true,
+      "violations": [],
+      "checks": [
+        {
+          "label": "Shared action budget",
+          "used": 365403,
+          "limit": 500000,
+          "slack": 134597,
+          "unit": "pence",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Transfer allowance",
+          "used": 1200,
+          "limit": 1200,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Minimum served units",
+          "used": 8949,
+          "limit": 0,
+          "slack": 8949,
+          "unit": "units",
+          "minimum": true,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "North receiving capacity",
+          "used": 798,
+          "limit": 2000,
+          "slack": 1202,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Central receiving capacity",
+          "used": 1149,
+          "limit": 2000,
+          "slack": 851,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "South receiving capacity",
+          "used": 1094,
+          "limit": 2000,
+          "slack": 906,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 21212",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 21212",
+          "used": 223,
+          "limit": 275,
+          "slack": 52,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Cobalt / 21212",
+          "used": 0,
+          "limit": 193,
+          "slack": 193,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 22197",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 22197",
+          "used": 178,
+          "limit": 178,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 22197",
+          "used": 122,
+          "limit": 124,
+          "slack": 2,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 22834",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 22834",
+          "used": 113,
+          "limit": 113,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 22834",
+          "used": 17,
+          "limit": 79,
+          "slack": 62,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 84077",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 84077",
+          "used": 280,
+          "limit": 693,
+          "slack": 413,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Cobalt / 84077",
+          "used": 0,
+          "limit": 485,
+          "slack": 485,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Atlas / 85099B",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 85099B",
+          "used": 238,
+          "limit": 238,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 85099B",
+          "used": 167,
+          "limit": 167,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Atlas / 85123A",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Beacon / 85123A",
+          "used": 296,
+          "limit": 296,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Cobalt / 85123A",
+          "used": 207,
+          "limit": 207,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 21212 / North",
+          "used": 245,
+          "limit": 245,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 21212 / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 21212 / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22197 / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22197 / Central",
+          "used": 0,
+          "limit": 161,
+          "slack": 161,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Initial surplus / 22197 / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22834 / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22834 / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 22834 / South",
+          "used": 85,
+          "limit": 85,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 84077 / North",
+          "used": 645,
+          "limit": 851,
+          "slack": 206,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        },
+        {
+          "label": "Initial surplus / 84077 / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 84077 / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85099B / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85099B / Central",
+          "used": 122,
+          "limit": 122,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85099B / South",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85123A / North",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85123A / Central",
+          "used": 0,
+          "limit": 0,
+          "slack": 0,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": true
+        },
+        {
+          "label": "Initial surplus / 85123A / South",
+          "used": 103,
+          "limit": 206,
+          "slack": 103,
+          "unit": "units",
+          "minimum": false,
+          "ok": true,
+          "at_limit": false
+        }
+      ],
+      "note": "At-limit constraints are descriptive; zero slack alone is not a causal or economic bottleneck proof."
+    }
+  },
+  "comparable": true,
+  "budget_sensitivity": [
+    {
+      "budget_gbp": 0,
+      "status": "optimal",
+      "metrics": {
+        "demand": 8968,
+        "served": 5908,
+        "shortfall": 3060,
+        "service_pct": 65.87867975022301,
+        "purchase_cost_pence": 0,
+        "transfer_cost_pence": 0,
+        "action_cost_pence": 0,
+        "shortfall_penalty_pence": 3005024,
+        "objective_pence": 3005024,
+        "transferred_units": 0
+      }
+    },
+    {
+      "budget_gbp": 2500,
+      "status": "optimal",
+      "metrics": {
+        "demand": 8968,
+        "served": 8259,
+        "shortfall": 709,
+        "service_pct": 92.09411239964318,
+        "purchase_cost_pence": 207993,
+        "transfer_cost_pence": 42000,
+        "action_cost_pence": 249993,
+        "shortfall_penalty_pence": 520632,
+        "objective_pence": 770625,
+        "transferred_units": 1200
+      }
+    },
+    {
+      "budget_gbp": 5000,
+      "status": "optimal",
+      "metrics": {
+        "demand": 8968,
+        "served": 8949,
+        "shortfall": 19,
+        "service_pct": 99.78813559322033,
+        "purchase_cost_pence": 323403,
+        "transfer_cost_pence": 42000,
+        "action_cost_pence": 365403,
+        "shortfall_penalty_pence": 22192,
+        "objective_pence": 387595,
+        "transferred_units": 1200
+      }
+    },
+    {
+      "budget_gbp": 7500,
+      "status": "optimal",
+      "metrics": {
+        "demand": 8968,
+        "served": 8949,
+        "shortfall": 19,
+        "service_pct": 99.78813559322033,
+        "purchase_cost_pence": 323403,
+        "transfer_cost_pence": 42000,
+        "action_cost_pence": 365403,
+        "shortfall_penalty_pence": 22192,
+        "objective_pence": 387595,
+        "transferred_units": 1200
+      }
+    }
+  ],
+  "supply_bounds": [
+    {
+      "sku": "21212",
+      "required": 1377,
+      "initial_stock": 1154,
+      "eligible_supplier_capacity": 468,
+      "minimum_unmet_from_supply": 0
+    },
+    {
+      "sku": "22197",
+      "required": 888,
+      "initial_stock": 749,
+      "eligible_supplier_capacity": 302,
+      "minimum_unmet_from_supply": 0
+    },
+    {
+      "sku": "22834",
+      "required": 566,
+      "initial_stock": 436,
+      "eligible_supplier_capacity": 192,
+      "minimum_unmet_from_supply": 0
+    },
+    {
+      "sku": "84077",
+      "required": 3467,
+      "initial_stock": 3393,
+      "eligible_supplier_capacity": 1178,
+      "minimum_unmet_from_supply": 0
+    },
+    {
+      "sku": "85099B",
+      "required": 1192,
+      "initial_stock": 768,
+      "eligible_supplier_capacity": 405,
+      "minimum_unmet_from_supply": 19
+    },
+    {
+      "sku": "85123A",
+      "required": 1478,
+      "initial_stock": 1078,
+      "eligible_supplier_capacity": 503,
+      "minimum_unmet_from_supply": 0
+    }
+  ],
+  "objective_reduction_pct": 33.81798002219756,
+  "interpretation": "Model objective = action spending + assumed shortfall penalties. It is not measured company savings. The solver optimizes this objective, not service alone."
+}
